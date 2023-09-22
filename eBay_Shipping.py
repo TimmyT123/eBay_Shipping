@@ -105,9 +105,8 @@ def move_to(text):
 
 def press_print(mail_ship_rate):
     #  match mail_ship_rate with ship_rate_pop_up to make sure they equal and then click on print
-    result_ship = re.search(r'.*FLATRATE-([A-Z]+)_([A-Z]+)', mail_ship_rate).groups()
     ship_rate_pop_up = driver1.find_element(By.CSS_SELECTOR, "#sticky_breakpoint > div > section > div > div.bHHlHzB3jev8rUf0aAO4 > div:nth-child(1) > div.CSf7GSC1oCSqyo9ANmTM").text
-    if result_ship[0].upper() in ship_rate_pop_up.upper() and result_ship[1] in ship_rate_pop_up.upper():
+    if ship_rate_pop_up.upper() == mail_ship_rate.upper():
         #  print(f'{result_ship[0]} and {result_ship[1]} is in {ship_rate_pop_up}')
         # Click on the first 'Print Label'
         driver1.find_element(By.CSS_SELECTOR, '#sticky_breakpoint > div > section > div > div.qjeKQ7eZzKAGTDD5Wx7g > button').click()
