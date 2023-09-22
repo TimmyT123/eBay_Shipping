@@ -94,8 +94,13 @@ def check_messages():
 # move to TEXT
 def move_to(text):
     element = driver1.find_element(By.XPATH, f"//*[contains(text(), '{text}')]")
-    actions = ActionChains(driver1)
-    actions.move_to_element(element).perform()
+    desired_y = (element.size['height'] / 2) + element.location['y']
+    window_h = driver1.execute_script('return window.innerHeight')
+    window_y = driver1.execute_script('return window.pageYOffset')
+    current_y = (window_h / 2) + window_y
+    scroll_y_by = desired_y - current_y
+    driver1. execute_script("window.scrollBy(0, arguments[0]);", scroll_y_by)
+    time.sleep(.5)
 
 
 def press_print(mail_ship_rate):
@@ -240,29 +245,31 @@ def main(main_window):
             time.sleep(1)
 
             mail = ''
+            mail_id = ''
             if test1 == '1000':
                 mail = 'USPS Priority Mail Flat Rate Small Box'
-                # mail = 'USPS-STANDARD_FLATRATE-SMALL_BOX-DROP_OFF'
+                # mail_id = 'USPS-STANDARD_FLATRATE-SMALL_BOX-DROP_OFF'
                 pp = True
             elif test1 == '2000':
                 mail = 'USPS Priority Mail Flat Rate Padded Envelope'
-                # mail = 'USPS-STANDARD_FLATRATE-PADDED_ENVELOPE-DROP_OFF'
+                # mail_id = 'USPS-STANDARD_FLATRATE-PADDED_ENVELOPE-DROP_OFF'
                 pp = True
             elif test1 == '5000':
                 mail = 'USPS Priority Mail Flat Rate Medium Box'
-                # mail = 'USPS-STANDARD_FLATRATE-MEDIUM_BOX-DROP_OFF'
+                # mail_id = 'USPS-STANDARD_FLATRATE-MEDIUM_BOX-DROP_OFF'
                 pp = True
             if mail:  # CLICK ON RADIO BUTTON OF mail CHOICE
                 move_to(mail)
-                # driver1.execute_script("window.scrollTo(0,1000);")
+
                 time.sleep(.5)
-                driver1.find_element(By.XPATH, f"input[type='radio'][text='{mail}']").click()
-                # driver1.find_element(By.CSS_SELECTOR, f"input[type='radio'][id={mail}]").click()
+                # Click on radio button using XPATH with mail
+                driver1.find_element(By.XPATH, f"//*[contains(text(), '{mail}')]").click()
+                # Clicking on radio button using CSS_SELECTOR and id
+                # driver1.find_element(By.CSS_SELECTOR, f"input[type='radio'][id={mail_id}]").click()
                 time.sleep(.5)
 
             driver1.execute_script("window.scrollTo(0,100);")  # MOVE SCREEN BACK TO ORIGINAL POSITION
-            input('pause and quit')
-            quit()
+
             if pp:
                 press_print(mail)
 
