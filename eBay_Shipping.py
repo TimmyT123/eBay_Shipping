@@ -104,6 +104,12 @@ def move_to(text):
 
 
 def press_print(mail_ship_rate):
+    global test
+    input(f' test is {test}')  # temp statement to see if test is working
+    quit()
+    if test:
+        input('This is a test and there is no press print')
+        return
     #  match mail_ship_rate with ship_rate_pop_up to make sure they equal and then click on print
     ship_rate_pop_up = driver1.find_element(By.CSS_SELECTOR, "#sticky_breakpoint > div > section > div > div.bHHlHzB3jev8rUf0aAO4 > div:nth-child(1) > div.CSf7GSC1oCSqyo9ANmTM").text
     if ship_rate_pop_up.upper() == mail_ship_rate.upper():
@@ -128,6 +134,26 @@ def press_print(mail_ship_rate):
 
     # input('we are at press print')
 
+def last_item_in_bulk():
+    # Get last items like the 500 amount
+    driver1.get('https://www.ebay.com/sh/ord/?filter=status%3AAWAITING_SHIPMENT&sort=paiddate')
+    # TODO get the last item 500 amount
+    table = driver1.find_element("xpath", '//*[@id="mod-main-cntr"]/table/tbody')
+    trs = table.find_elements("xpath", 'tr')
+    for tr in trs:
+        tds = tr.find_elements("xpath", 'td')
+        for tdnum, td in enumerate(tds):
+            td_text = td.text
+            a500 = re.search(r'Amount:500[ ,\n]', td_text)
+            if a500 is not None:
+                # click on the checkbox for this item with Amount:500 Last item in bulk
+                driver1.find_element(By.CSS_SELECTOR, f"input[type='checkbox'][value='{order_number}']").click()
+            order_number1 = re.search(r'\d{2}-\d{5}-\d{5}', td_text)
+            if order_number1 is not None:
+                order_number = order_number1.group()
+                move_to(order_number)
+
+            # print(tdnum, td_text)
 
 def main(main_window):
 
@@ -276,44 +302,18 @@ def main(main_window):
 
 
 
-    # # ORDERING LOOP
-    # for tr in trs:
-    #     print("new one?")
-    #     tds = tr.find_elements("xpath", 'td')
-    #     for tdnum, td in enumerate(tds):
-    #
-    #         print(tdnum, td.text)
-    #         print()
-
-    # Get last items like the 500 amount
-    driver1.get('https://www.ebay.com/sh/ord/?filter=status%3AAWAITING_SHIPMENT&sort=paiddate')
-    # TODO get the last item 500 amount
-    table = driver1.find_element("xpath", '//*[@id="mod-main-cntr"]/table/tbody')
-    trs = table.find_elements("xpath", 'tr')
-    for tr in trs:
-        tds = tr.find_elements("xpath", 'td')
-
-        td_text_re_hold = ''
-        for tdnum, td in enumerate(tds):
-            td_text = td.text
-            print(tdnum, td_text)
 
     input('wait for a key')
-            # if tdnum == 1 and 'Purchase shipping label' in td.text:
-            #     print(td.text)
-            #
-            #     input('\nfind shipping label')  #TODO find css_selector
-            #
-            #     # Press 'Print shipping label'
-            #     td.find_element("css_selector", 'span.default-action.fake-link').click()
-            #
-            #     input('temp stay')
+
 
 
 if __name__ == "__main__":
+    global test
+    test = True  # Test 'True' to not print
     driver1 = setup()
     check_messages()
     main_window = driver1.current_window_handle
     main(main_window)
+    last_item_in_bulk()
     quit()
 
