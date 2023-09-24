@@ -44,7 +44,7 @@ def setup():
     driver1.find_element("xpath", '//*[@id="userid"]').send_keys(os.environ.get('My_eBay_username'))
     driver1.find_element("xpath", '//*[@id="signin-continue-btn"]').click()
 
-    #time.sleep(2)
+    # time.sleep(2)
     # input('When ready, press enter for password....please')
 
     timeout = 40  # security puzzle may pop up here
@@ -73,6 +73,7 @@ def setup():
     if tot_time < 5:  # if tot_time is less than 5 then press continue button
         driver1.find_element("xpath", '//*[@id="continue-wrapper"]').click()
     return driver1
+
 
 def my_tkinter_window(my_statement):
     # Open tkinter window
@@ -105,8 +106,6 @@ def move_to(text):
 
 def press_print(mail_ship_rate):
     global test
-    input(f' test is {test}')  # temp statement to see if test is working
-    quit()
     if test:
         input('This is a test and there is no press print')
         return
@@ -134,6 +133,7 @@ def press_print(mail_ship_rate):
 
     # input('we are at press print')
 
+
 def last_item_in_bulk():
     # Get last items like the 500 amount
     driver1.get('https://www.ebay.com/sh/ord/?filter=status%3AAWAITING_SHIPMENT&sort=paiddate')
@@ -154,6 +154,7 @@ def last_item_in_bulk():
                 move_to(order_number)
 
             # print(tdnum, td_text)
+
 
 def main(main_window):
 
@@ -205,7 +206,6 @@ def main(main_window):
                     driver1.get(f'https://www.ebay.com/sh/ord/?filter=status%3AAWAITING_SHIPMENT&search=ordernumber%3A{td_text_re_hold}')
                     my_tkinter_window(f"We don't need to replenish, but\nWE NEED TO SEND {amount} IN A PACKAGE")
                     quit()
-
 
     # input('stop and check')
 
@@ -300,11 +300,7 @@ def main(main_window):
 
             my_tkinter_window(f'{len(new_items_dict)-i}\n{it}')
 
-
-
-
     input('wait for a key')
-
 
 
 if __name__ == "__main__":
