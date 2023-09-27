@@ -154,6 +154,7 @@ def last_item_in_bulk():
                 move_to(order_number)
 
             # print(tdnum, td_text)
+    input('stop and check then press to quit')
 
 
 def main(main_window):
@@ -199,13 +200,15 @@ def main(main_window):
                 amount = int(td.text[0])
                 available = int(td.text[2:4])
                 if available < min_avail:
-                    my_tkinter_window(f'WE NEED TO REPLENISH {item_amount} BECAUSE WE HAVE {available} AVAILABLE')
-                    quit()
+                    my_tkinter_window(f'WE NEED TO REPLENISH {item_amount} BECAUSE WE HAVE {available} AVAILABLE.\n'
+                                      f'Hit ENTER when you have finished replenishing')
+                    main(main_window)
                 if amount > 1:
                     # Make it go to the item in the website
                     driver1.get(f'https://www.ebay.com/sh/ord/?filter=status%3AAWAITING_SHIPMENT&search=ordernumber%3A{td_text_re_hold}')
-                    my_tkinter_window(f"We don't need to replenish, but\nWE NEED TO SEND {amount} IN A PACKAGE")
-                    quit()
+                    my_tkinter_window(f"We don't need to replenish, but\nWE NEED TO SEND {amount} IN A PACKAGE.\n"
+                                      f"Hit ENTER when you have finished printing that item.")
+                    main(main_window)
 
     # input('stop and check')
 
@@ -305,7 +308,7 @@ def main(main_window):
 
 if __name__ == "__main__":
     global test
-    test = True  # Test 'True' to not print
+    test = False  # Test 'True' to not print
     driver1 = setup()
     check_messages()
     main_window = driver1.current_window_handle
