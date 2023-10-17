@@ -115,7 +115,7 @@ def press_print(mail_ship_rate):
         #  print(f'{result_ship[0]} and {result_ship[1]} is in {ship_rate_pop_up}')
         # Click on the first 'Print Label'
         driver1.find_element(By.CSS_SELECTOR, '#sticky_breakpoint > div > section > div > div.qjeKQ7eZzKAGTDD5Wx7g > button').click()
-        time.sleep(12)
+        time.sleep(15)
 
         # print(f'all windows opened are {driver1.window_handles}')
 
@@ -126,7 +126,7 @@ def press_print(mail_ship_rate):
             print1.click()
         except:
             driver1.switch_to.window(driver1.window_handles[0])
-            input('There has been a print error with the second window.\n'
+            my_tkinter_window('There has been a print error with the second window.\n'
                   'Did you print it and now you want to continue to next item?')
 
         driver1.switch_to.window(driver1.window_handles[0])
@@ -137,7 +137,8 @@ def press_print(mail_ship_rate):
 def last_item_in_bulk():
     # Get last items like the 500 amount
     driver1.get('https://www.ebay.com/sh/ord/?filter=status%3AAWAITING_SHIPMENT&sort=paiddate')
-    # TODO get the last item 500 amount
+    time.sleep(3)
+    # get the last item 500 amount
     table = driver1.find_element("xpath", '//*[@id="mod-main-cntr"]/table/tbody')
     trs = table.find_elements("xpath", 'tr')
     for tr in trs:
@@ -154,6 +155,9 @@ def last_item_in_bulk():
                 move_to(order_number)
 
             # print(tdnum, td_text)
+
+    driver1.execute_script("window.scrollTo(0,100);")  # MOVE SCREEN BACK TO THE BEGINNING POSITION
+
     input('stop and check then press to quit')
 
 
@@ -188,8 +192,13 @@ def main(main_window):
             # print()
             if tdnum == 3 and 'available' in td.text:
                 # td_text = td.text
-                item_amount = next(my_next_item_amount).text
-                # print(item_amount)
+                # Try/except is for if the item does not have an item amount
+                try:
+                    item_amount = next(my_next_item_amount).text
+                    # print(item_amount)
+                except Exception as e:
+                    print(e)
+
                 if item_amount == '500':
                     min_avail = 14
                 elif item_amount == '1000':
@@ -238,7 +247,7 @@ def main(main_window):
 
     # sort by the amount
     new_items_dict = sorted(items.items(), key=lambda item: item[1].get('amount'), reverse=True)
-    print(new_items_dict)
+    # print(new_items_dict)
 
     # Count the values in amount and display for inventory ex. '500': 10   '1000': 4   '5000': 2
     my_tkinter_window(Counter(inventory))
@@ -296,14 +305,14 @@ def main(main_window):
                 # driver1.find_element(By.CSS_SELECTOR, f"input[type='radio'][id={mail_id}]").click()
                 time.sleep(.5)
 
-            driver1.execute_script("window.scrollTo(0,100);")  # MOVE SCREEN BACK TO ORIGINAL POSITION
+            driver1.execute_script("window.scrollTo(0,100);")  # MOVE SCREEN BACK TO THE BEGINNING POSITION
 
             if pp:
                 press_print(mail)
 
             my_tkinter_window(f'{len(new_items_dict)-i}\n{it}')
 
-    input('wait for a key')
+    my_tkinter_window(Counter(inventory)) # show the inventory to see if it matches with labels that were printed
 
 
 if __name__ == "__main__":
