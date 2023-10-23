@@ -107,7 +107,7 @@ def move_to(text):
 def press_print(mail_ship_rate):
     global test
     if test:
-        input('This is a test and there is no press print')
+        my_tkinter_window('This is a test and there is no attempt to print')
         return
     #  match mail_ship_rate with ship_rate_pop_up to make sure they equal and then click on print
     ship_rate_pop_up = driver1.find_element(By.CSS_SELECTOR, "#sticky_breakpoint > div > section > div > div.bHHlHzB3jev8rUf0aAO4 > div:nth-child(1) > div.CSf7GSC1oCSqyo9ANmTM").text
@@ -176,7 +176,12 @@ def main(main_window):
     trs = table.find_elements("xpath", 'tr')
 
     item_amounts = driver1.find_elements(By.CSS_SELECTOR, "tr td div p strong")
-    my_next_item_amount = iter(item_amounts)
+
+    item_amounts_list = []
+    item_number = 0
+
+    for items in item_amounts:
+        item_amounts_list.append(items.text)
 
     # CHECK IF MORE THAN ONE WAS ORDERED LOOP
     for tr in trs:
@@ -192,10 +197,12 @@ def main(main_window):
             # print()
             if tdnum == 3 and 'available' in td.text:
                 # td_text = td.text
+
                 # Try/except is for if the item does not have an item amount
                 try:
-                    item_amount = next(my_next_item_amount).text
-                    # print(item_amount)
+                    item_amount = item_amounts_list[item_number]
+                    item_number += 1
+
                 except Exception as e:
                     print(e)
 
