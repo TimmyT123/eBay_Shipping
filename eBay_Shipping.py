@@ -175,7 +175,8 @@ def main(main_window):
     table = driver1.find_element("xpath", '//*[@id="mod-main-cntr"]/table/tbody')
     trs = table.find_elements("xpath", 'tr')
 
-    item_amounts = driver1.find_elements(By.CSS_SELECTOR, "tr td div p strong")
+    item_amounts = driver1.find_elements(By.CSS_SELECTOR, "tr td div span span strong")
+    #  #orderid_11-11131-25638__item-info_0 > td.order-purchase-details > div.purchase-details > span.item-variations > span > strong
 
     item_amounts_list = []
     item_number = 0
@@ -211,7 +212,7 @@ def main(main_window):
                 elif item_amount == '1000':
                     min_avail = 10
                 else:
-                    min_avail = 6
+                    min_avail = 5
 
                 amount = int(td.text[0])
                 available = int(td.text[2:4])
@@ -225,12 +226,13 @@ def main(main_window):
                     my_tkinter_window(f"We don't need to replenish, but\nWE NEED TO SEND {amount} IN A PACKAGE.\n"
                                       f"Hit ENTER when you have finished printing that item.")
                     main(main_window)
+                #TODO Check if the same buyer is in multiple orders and then ask if you can ship it all in one container and the continue
 
     # input('stop and check')
 
     # GET ITEM NAMES AND AMOUNTS
-    item_names = driver1.find_elements(By.CSS_SELECTOR, "tr td div p .item-title")
-    item_amounts = driver1.find_elements(By.CSS_SELECTOR, "tr td div p strong")
+    item_names = driver1.find_elements(By.CSS_SELECTOR, "tr td div .item-title")
+    item_amounts = driver1.find_elements(By.CSS_SELECTOR, "tr td div span span strong")
 
     ebay_link_list = []
     item_label_link = driver1.find_elements(By.CSS_SELECTOR, "tr td div .order-line-actions [href]")
